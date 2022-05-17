@@ -1,3 +1,3 @@
 # RoboCUP2022
 
-KUY RAI SUS PONG TAI
+This is our repository for Robocup Junior 2022

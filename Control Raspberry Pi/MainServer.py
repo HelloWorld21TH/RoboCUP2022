@@ -11,4 +11,4 @@ while True:
     GET = message
     print(GET)
     socket.send_string("recived")
-    
+    #Hello world

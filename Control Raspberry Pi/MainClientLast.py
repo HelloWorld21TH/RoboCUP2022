@@ -6,14 +6,12 @@ pygame.joystick.init()
 dscreen = pygame.display.set_mode([240, 160])
 os.putenv('SDL_VIDEODRIVER', 'fbcon')
 pygame.display.init()
-AXIS0,AXIS1 = 0,0
-LAXIS = ""
 key = ""
 context = zmq.Context()
 #  Socket to talk to server
 print("Connecting to hello world server…")
 socket = context.socket(zmq.REQ)
-socket.connect("tcp://192.168.240.96:5555") #This is your Raspberry pi IP
+socket.connect("tcp://192.168.1.115:5555") #This is your Raspberry pi IP
 
 while True:
     for event in pygame.event.get():
@@ -35,18 +33,24 @@ while True:
             elif event.key == pygame.K_d:
                 key = "D"
                 print("Right")
+            elif event.key == pygame.K_UP:
+                key = "UP"
+                print("Servo +")
+            elif event.key == pygame.K_DOWN:
+                key = "DOWN"
+                print("Servo -")
+            elif event.key == pygame.K_LEFT:
+                key = "LEFT"
+                print("Servo-Previous")
+            elif event.key == pygame.K_RIGHT:
+                key = "RIGHT"
+                print("Servo-Next")
             elif event.key == pygame.K_i:
                 key = "I"
-                print("Servo +")
+                print("Boost UP")
             elif event.key == pygame.K_k:
                 key = "K"
-                print("Servo -")
-            elif event.key == pygame.K_j:
-                key = "J"
-                print("Servo-Previous")
-            elif event.key == pygame.K_l:
-                key = "L"
-                print("Servo-Next")
+                print("Boost Down")
         elif event.type == pygame.KEYUP:
             key = ""
 
@@ -54,10 +58,3 @@ while True:
         print(f"Sent : {key}")
         message = socket.recv()
         print(f"Received reply [ {message} ]")
-
-
-        
-
-
-
-

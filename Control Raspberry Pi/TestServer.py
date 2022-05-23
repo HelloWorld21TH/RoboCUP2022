@@ -40,7 +40,21 @@ GPIO.output(32, 1)
 
 #Servo
 SList = 1
-ServoAngle = [0,0,0,0,0,0]
+ServoAngle = [150,90,80,0,0,0]
+
+def Angle(angle):
+    duty = angle / 18 + 2
+    return duty
+
+def ServoPOS(x):
+    if x > 6 : x = x-6
+    elif x < 1 : x = 6-x
+    return x
+
+def ServoAPOS(x):
+    if x > 180 : x = x-180
+    elif x < 1 : x = 180-x
+    return x
 
 GPIO.setup(8, GPIO.OUT)
 GPIO.setup(10, GPIO.OUT)
@@ -58,12 +72,17 @@ Servo6 = GPIO.PWM(15, 50)
 
 SerList = [Servo1,Servo2,Servo3,Servo4,Servo5,Servo6]
 
-Servo1.start(2.5) # Initialization
-Servo2.start(2.5)
-Servo3.start(2.5)
-Servo4.start(2.5)
-Servo5.start(2.5)
-Servo6.start(2.5)
+Servo1.start(Angle(ServoAngle[0])) # Initialization
+Servo2.start(Angle(ServoAngle[1]))
+Servo3.start(Angle(ServoAngle[2]))
+Servo4.start(Angle(ServoAngle[3]))
+Servo5.start(Angle(ServoAngle[4]))
+Servo6.start(Angle(ServoAngle[5]))
+#Set Motor
+GPIO.output(31, 0)
+GPIO.output(33, 0)
+GPIO.output(35, 0)
+GPIO.output(37, 0)
 PWMA.start(0)
 PWMB.start(0)
 PWMBo.start(100)
@@ -96,7 +115,7 @@ def Motor(Left,Right):
         GPIO.output(37, 1)
         
 
-    elif Left >= 0 and Right <= 0:
+    elif Left > 0 and Right < 0:
         print("Left")
         #Left
         PWMA.ChangeDutyCycle(Left)
@@ -109,7 +128,7 @@ def Motor(Left,Right):
         GPIO.output(37, 1)
         
 
-    elif Left <= 0 and Right >= 0:
+    elif Left < 0 and Right > 0:
         print("Right")
         #Left
         PWMA.ChangeDutyCycle(Left*-1)
@@ -145,21 +164,9 @@ def Boost(x):
         GPIO.output(27, 0)
         GPIO.output(29, 0)
 
-def Angle(angle):
-    duty = angle / 18 + 2
-    return duty
 
-def ServoPOS(x):
-    if x > 6 : x = x-6
-    elif x < 1 : x = 6-x
-    return x
-
-def ServoAPOS(x):
-    if x > 180 : x = x-180
-    elif x < 1 : x = 180-x
-    return x
 message = "None"
-Motor(0,0)
+
 try:
     while(1):
         message = socket.recv()
@@ -177,13 +184,13 @@ try:
             Motor(100,100)        
         elif message ==  b'A':
             print("Left")
-            Motor(-100,100)
+            Motor(100,-100)
         elif message ==  b'S':
             print("Backward")
             Motor(-100,-100)
         elif message ==  b'D':
             print("Right")
-            Motor(100,-100)
+            Motor(-100,100)
 
         elif message ==  b'LEFT':
             print("Servo Previous")
@@ -210,7 +217,24 @@ try:
             print(ServoAngle)
             print(SList)
 
+    ServoAngle = [150,90,80,0,0,0]
+    Servo1.start(Angle(ServoAngle[0])) #Set to back
+    Servo2.start(Angle(ServoAngle[1]))
+    Servo3.start(Angle(ServoAngle[2]))
+    Servo4.start(Angle(ServoAngle[3]))
+    Servo5.start(Angle(ServoAngle[4]))
+    Servo6.start(Angle(ServoAngle[5]))
+    time.sleep(2)
     GPIO.cleanup()
 
 except KeyboardInterrupt:
-  GPIO.cleanup()
+    
+    ServoAngle = [150,90,80,0,0,0]
+    Servo1.start(Angle(ServoAngle[0])) #Set to back
+    Servo2.start(Angle(ServoAngle[1]))
+    Servo3.start(Angle(ServoAngle[2]))
+    Servo4.start(Angle(ServoAngle[3]))
+    Servo5.start(Angle(ServoAngle[4]))
+    Servo6.start(Angle(ServoAngle[5]))
+    time.sleep(2)
+    GPIO.cleanup()

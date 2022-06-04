@@ -1,7 +1,0 @@
-Server must run in Raspberry pi
-Client must run in your controller PC
-##Dont forget to change Raspberry Pi IP in Client##
-
-New
-Run in TestServer.py for raspberry pi
-And MainClientLast.py for PC
